@@ -30,12 +30,17 @@ public class SolicitudController {
         List<Solicitud> solicitud = solicitudService.findAll();
         return ResponseEntity.ok(solicitud);
     }
-    
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Solicitud> findById(@PathVariable Long id) {
+    // return solicitudService.findById(id)
+    // .map(ResponseEntity::ok)
+    // .orElseThrow(() -> new RuntimeException("solicitud no encontrada"));
+    // }
     @GetMapping("/{id}")
     public ResponseEntity<Solicitud> findById(@PathVariable Long id) {
-        return solicitudService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("solicitud no encontrada"));
+        Solicitud solicitud = solicitudService.findById(id);
+        return ResponseEntity.ok(solicitud);
     }
 
     @PostMapping
@@ -49,10 +54,11 @@ public class SolicitudController {
         Solicitud updated = solicitudService.update(id, solicitud);
         return ResponseEntity.ok(updated);
     }
+
     @PatchMapping("/{id}/activo")
-    public ResponseEntity<Solicitud>cambiarActivo(@PathVariable Long id){
-        Solicitud actualizado =solicitudService.cambiarActivo(id);
+    public ResponseEntity<Solicitud> cambiarActivo(@PathVariable Long id) {
+        Solicitud actualizado = solicitudService.cambiarActivo(id);
         return ResponseEntity.ok(actualizado);
     }
-    
+
 }

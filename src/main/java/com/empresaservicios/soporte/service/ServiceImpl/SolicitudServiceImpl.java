@@ -13,7 +13,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     private final SolicitudRepository solicitudRepository;
 
     public SolicitudServiceImpl(SolicitudRepository solicitudRepository) {
-        super(solicitudRepository);
+        super(solicitudRepository,"Solicitud");
         this.solicitudRepository = solicitudRepository;
     }
 

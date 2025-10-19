@@ -10,6 +10,6 @@ import com.empresaservicios.soporte.service.DatosEmpresaService;
 public class DatosEmpresaServiceImpl extends GenericServiceImpl<DatosEmpresa,Long> implements DatosEmpresaService {
     
     public DatosEmpresaServiceImpl(DatosEmpresaRepository datosEmpresaRepository){
-        super(datosEmpresaRepository);
+        super(datosEmpresaRepository,"DatosEmpresa");
     }
 }

@@ -28,12 +28,17 @@ public class AsignacionController {
         List<Asignacion> asignacion = asignacionService.findAll();
         return ResponseEntity.ok(asignacion);
     }
-    
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Asignacion> findById(@PathVariable Long id) {
+    // return asignacionService.findById(id)
+    // .map(ResponseEntity::ok)
+    // .orElseThrow(() -> new RuntimeException("asignacion no encontrada"));
+    // }
     @GetMapping("/{id}")
     public ResponseEntity<Asignacion> findById(@PathVariable Long id) {
-        return asignacionService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("asignacion no encontrada"));
+        Asignacion asignacion = asignacionService.findById(id);
+        return ResponseEntity.ok(asignacion);
     }
 
     @PostMapping

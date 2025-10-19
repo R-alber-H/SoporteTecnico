@@ -13,7 +13,7 @@ public class TecnicoServiceImpl extends GenericServiceImpl<Tecnico,Long> impleme
     private final TecnicoRepository tecnicoRepository;
 
     public TecnicoServiceImpl(TecnicoRepository tecnicoRepository){
-        super(tecnicoRepository);
+        super(tecnicoRepository,"Tecnico");
         this.tecnicoRepository = tecnicoRepository;
         
     }

@@ -1,7 +1,7 @@
 package com.empresaservicios.soporte.service.ServiceImpl;
 
 import java.util.List;
-import java.util.Optional;
+// import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,9 +9,11 @@ import com.empresaservicios.soporte.service.GenericService;
 
 public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID> {
     protected final JpaRepository<T, ID> repository;
+    private final String nombreEntidad;
 
-    public GenericServiceImpl(JpaRepository<T, ID> repository) {
+    public GenericServiceImpl(JpaRepository<T, ID> repository, String nombreEntidad ) {
         this.repository = repository;
+        this.nombreEntidad=nombreEntidad;
     }
 
     @Override
@@ -19,9 +21,14 @@ public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID>
         return repository.findAll();
     }
 
-    @Override
-    public Optional<T> findById(ID id) {
-        return repository.findById(id);
+    // @Override
+    // public Optional<T> findById(ID id) {
+    //     return repository.findById(id);
+    // }
+     @Override
+    public T findById(ID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException(nombreEntidad + " no encontrado"));
     }
 
     @Override

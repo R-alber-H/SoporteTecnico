@@ -24,18 +24,23 @@ import lombok.RequiredArgsConstructor;
 public class TecnicoController {
 
     private final TecnicoService tecnicoService;
-    
+
     @GetMapping
     public ResponseEntity<List<Tecnico>> findAll() {
         List<Tecnico> tecnicos = tecnicoService.findAll();
         return ResponseEntity.ok(tecnicos);
     }
-    
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Tecnico> findById(@PathVariable Long id) {
+    // return tecnicoService.findById(id)
+    // .map(ResponseEntity::ok)
+    // .orElseThrow(() -> new RuntimeException("Tecnico no encontrado"));
+    // }
     @GetMapping("/{id}")
     public ResponseEntity<Tecnico> findById(@PathVariable Long id) {
-        return tecnicoService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Tecnico no encontrado"));
+        Tecnico tecnico = tecnicoService.findById(id);
+        return ResponseEntity.ok(tecnico);
     }
 
     @PostMapping

@@ -13,7 +13,7 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente,Long> impleme
      private final ClienteRepository clienteRepository;
 
     public ClienteServiceImpl(ClienteRepository clienteRepository){
-        super(clienteRepository);  
+        super(clienteRepository,"Cliente");  
         this.clienteRepository = clienteRepository;   
     }
 
