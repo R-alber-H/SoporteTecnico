@@ -5,15 +5,17 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.empresaservicios.soporte.exception.SolicitudNoEncontradaException;
+import com.empresaservicios.soporte.exception.UsuarioNoEncontradoException;
 import com.empresaservicios.soporte.service.GenericService;
 
 public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID> {
     protected final JpaRepository<T, ID> repository;
     private final String nombreEntidad;
 
-    public GenericServiceImpl(JpaRepository<T, ID> repository, String nombreEntidad ) {
+    public GenericServiceImpl(JpaRepository<T, ID> repository, String nombreEntidad) {
         this.repository = repository;
-        this.nombreEntidad=nombreEntidad;
+        this.nombreEntidad = nombreEntidad;
     }
 
     @Override
@@ -23,12 +25,24 @@ public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID>
 
     // @Override
     // public Optional<T> findById(ID id) {
-    //     return repository.findById(id);
+    // return repository.findById(id);
     // }
-     @Override
+    // @Override
+    // public T findById(ID id) {
+    // return repository.findById(id)
+    // .orElseThrow(() -> new RuntimeException(nombreEntidad + " no encontrado"));
+    // }
+    @Override
     public T findById(ID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException(nombreEntidad + " no encontrado"));
+                .orElseThrow(() -> {
+                    return switch (nombreEntidad) {
+                        case "Cliente" -> new UsuarioNoEncontradoException("Cliente no encontrado");
+                        case "Solicitud" -> new SolicitudNoEncontradaException("Solicitud no encontrada");
+                        case "Tecnico" -> new UsuarioNoEncontradoException("Técnico no encontrado");
+                        default -> new RuntimeException(nombreEntidad + " no encontrado");
+                    };
+                });
     }
 
     @Override
@@ -44,5 +58,4 @@ public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID>
         return repository.save(entity);
     }
 
-    
 }

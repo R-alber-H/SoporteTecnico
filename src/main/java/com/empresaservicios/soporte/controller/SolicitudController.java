@@ -61,4 +61,16 @@ public class SolicitudController {
         return ResponseEntity.ok(actualizado);
     }
 
+    @PatchMapping("/{id}/resuelto")
+    public ResponseEntity<Solicitud> marcarResuelto(@PathVariable Long id){
+        Solicitud actualizado = solicitudService.marcarResuelto(id);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @PatchMapping("/{id}/no-resuelto")
+    public ResponseEntity<Solicitud> marcarNoResuelto(@PathVariable Long id){
+        Solicitud actualizado = solicitudService.marcarNoResuelto(id);
+        return ResponseEntity.ok(actualizado);
+    }
+
 }

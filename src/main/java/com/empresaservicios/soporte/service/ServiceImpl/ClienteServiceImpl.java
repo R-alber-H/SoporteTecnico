@@ -3,6 +3,7 @@ package com.empresaservicios.soporte.service.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import com.empresaservicios.soporte.entity.Cliente;
+import com.empresaservicios.soporte.exception.UsuarioNoEncontradoException;
 import com.empresaservicios.soporte.repository.ClienteRepository;
 import com.empresaservicios.soporte.service.ClienteService;
 import com.empresaservicios.soporte.utils.enums.Activo;
@@ -20,7 +21,7 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente,Long> impleme
     @Override
         public Cliente cambiarActivo(Long id) {
         Cliente cliente = clienteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado"));
 
         cliente.setActivo(cliente.getActivo() == Activo.Si ? Activo.No : Activo.Si);
         return clienteRepository.save(cliente);
