@@ -23,11 +23,11 @@ public class Solicitud extends BaseEntity  {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Activo activo = Activo.Si;
+    private Activo activo = Activo.SI;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Estado estado = Estado.Pendiente;
+    private Estado estado = Estado.PENDIENTE;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cliente", nullable = false)

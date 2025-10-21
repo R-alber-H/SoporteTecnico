@@ -23,15 +23,6 @@ public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID>
         return repository.findAll();
     }
 
-    // @Override
-    // public Optional<T> findById(ID id) {
-    // return repository.findById(id);
-    // }
-    // @Override
-    // public T findById(ID id) {
-    // return repository.findById(id)
-    // .orElseThrow(() -> new RuntimeException(nombreEntidad + " no encontrado"));
-    // }
     @Override
     public T findById(ID id) {
         return repository.findById(id)

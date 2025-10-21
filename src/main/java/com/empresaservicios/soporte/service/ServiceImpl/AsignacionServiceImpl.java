@@ -39,12 +39,12 @@ public class AsignacionServiceImpl extends GenericServiceImpl<Asignacion, Long> 
 
         Estado estado = solicitud.getEstado();
 
-        if (estado == Estado.Resuelto || estado == Estado.No_resuelto || estado == Estado.Cancelado) {
+        if (estado == Estado.RESUELTO || estado == Estado.NO_RESUELTO || estado == Estado.CANCELADO) {
             throw new RuntimeException("No se puede asignar la solicitud");
         }
 
-        if (estado == Estado.Pendiente) {
-            solicitud.setEstado(Estado.Asignado);
+        if (estado == Estado.PENDIENTE) {
+            solicitud.setEstado(Estado.ASIGNADO);
             solicitudRepository.save(solicitud);
         }
         asignacion.setTecnico(tecnico);

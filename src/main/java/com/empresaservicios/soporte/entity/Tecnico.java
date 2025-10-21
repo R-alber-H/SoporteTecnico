@@ -19,7 +19,7 @@ public class Tecnico extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Activo activo = Activo.Si;
+    private Activo activo = Activo.SI;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_datos_persona", nullable = false)

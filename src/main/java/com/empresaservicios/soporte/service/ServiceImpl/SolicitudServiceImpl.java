@@ -36,7 +36,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     public Solicitud cambiarActivo(Long id) {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
-        solicitud.setActivo(solicitud.getActivo() == Activo.Si ? Activo.No : Activo.Si);
+        solicitud.setActivo(solicitud.getActivo() == Activo.SI ? Activo.NO : Activo.SI);
         return solicitudRepository.save(solicitud);
     }
 
@@ -44,7 +44,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     public Solicitud marcarResuelto(Long id){
         Solicitud solicitud = solicitudRepository.findById(id)
             .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
-        solicitud.setEstado(Estado.Resuelto);
+        solicitud.setEstado(Estado.RESUELTO);
        return solicitudRepository.save(solicitud);
         
     }
@@ -53,7 +53,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     public Solicitud marcarNoResuelto(Long id){
        Solicitud solicitud = solicitudRepository.findById(id)
             .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
-        solicitud.setEstado(Estado.No_resuelto);
+        solicitud.setEstado(Estado.NO_RESUELTO);
        return solicitudRepository.save(solicitud); 
     }
 
@@ -61,7 +61,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     public Solicitud marcarCancelado(Long id){
         Solicitud solicitud = solicitudRepository.findById(id)
         .orElseThrow(()-> new SolicitudNoEncontradaException("solicitud no encontrada"));
-        solicitud.setEstado(Estado.Cancelado);
+        solicitud.setEstado(Estado.CANCELADO);
         return solicitudRepository.save(solicitud);
     }
 }

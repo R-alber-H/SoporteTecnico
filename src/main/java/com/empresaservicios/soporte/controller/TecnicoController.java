@@ -1,6 +1,7 @@
 package com.empresaservicios.soporte.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,15 +43,15 @@ public class TecnicoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Tecnico> update(@PathVariable Long id, @RequestBody Tecnico tecnico) {
-        Tecnico updated = tecnicoService.update(id, tecnico);
-        return ResponseEntity.ok(updated);
-    }
-
     @PatchMapping("/{id}/activo")
     public ResponseEntity<Tecnico> cambiarActivo(@PathVariable Long id) {
         Tecnico actualizado = tecnicoService.cambiarActivo(id);
         return ResponseEntity.ok(actualizado);
+    }
+
+     @PatchMapping("/{id}/actualizarDatos")
+    public ResponseEntity<Tecnico> actualizarDatos(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
+        Tecnico datosNuevos = tecnicoService.actualizarDatos(id, datos);
+        return ResponseEntity.ok(datosNuevos);
     }
 }
