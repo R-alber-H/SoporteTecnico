@@ -31,12 +31,6 @@ public class TecnicoController {
         return ResponseEntity.ok(tecnicos);
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Tecnico> findById(@PathVariable Long id) {
-    // return tecnicoService.findById(id)
-    // .map(ResponseEntity::ok)
-    // .orElseThrow(() -> new RuntimeException("Tecnico no encontrado"));
-    // }
     @GetMapping("/{id}")
     public ResponseEntity<Tecnico> findById(@PathVariable Long id) {
         Tecnico tecnico = tecnicoService.findById(id);

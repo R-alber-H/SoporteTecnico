@@ -29,12 +29,6 @@ public class AsignacionController {
         return ResponseEntity.ok(asignacion);
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Asignacion> findById(@PathVariable Long id) {
-    // return asignacionService.findById(id)
-    // .map(ResponseEntity::ok)
-    // .orElseThrow(() -> new RuntimeException("asignacion no encontrada"));
-    // }
     @GetMapping("/{id}")
     public ResponseEntity<Asignacion> findById(@PathVariable Long id) {
         Asignacion asignacion = asignacionService.findById(id);

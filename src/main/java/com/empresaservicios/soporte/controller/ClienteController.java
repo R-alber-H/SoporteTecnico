@@ -31,12 +31,6 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Cliente> findById(@PathVariable Long id) {
-    //     return clienteService.findById(id)
-    //             .map(ResponseEntity::ok)
-    //             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-    // }
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> findById(@PathVariable Long id) {
         Cliente cliente = clienteService.findById(id);

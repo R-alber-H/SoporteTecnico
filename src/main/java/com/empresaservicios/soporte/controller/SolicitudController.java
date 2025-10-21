@@ -31,12 +31,6 @@ public class SolicitudController {
         return ResponseEntity.ok(solicitud);
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Solicitud> findById(@PathVariable Long id) {
-    // return solicitudService.findById(id)
-    // .map(ResponseEntity::ok)
-    // .orElseThrow(() -> new RuntimeException("solicitud no encontrada"));
-    // }
     @GetMapping("/{id}")
     public ResponseEntity<Solicitud> findById(@PathVariable Long id) {
         Solicitud solicitud = solicitudService.findById(id);
@@ -70,6 +64,12 @@ public class SolicitudController {
     @PatchMapping("/{id}/no-resuelto")
     public ResponseEntity<Solicitud> marcarNoResuelto(@PathVariable Long id){
         Solicitud actualizado = solicitudService.marcarNoResuelto(id);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<Solicitud> marcarCancelado(@PathVariable Long id){
+        Solicitud actualizado = solicitudService.marcarCancelado(id);
         return ResponseEntity.ok(actualizado);
     }
 
