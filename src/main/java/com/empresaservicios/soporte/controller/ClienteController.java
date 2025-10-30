@@ -18,6 +18,7 @@ import com.empresaservicios.soporte.service.ClienteService;
 
 import lombok.RequiredArgsConstructor;
 
+// TODO: MANEJAR EL MENSAJE DE LAS EXCEPCIONES 
 @RestController
 @RequestMapping("/api/clientes")
 @RequiredArgsConstructor

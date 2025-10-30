@@ -40,6 +40,9 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
         return solicitudRepository.save(solicitud);
     }
 
+    // todo: crear un solo metodo que reciba el nuevo valor del estado ejm: cambiarEstadoSolicitud
+    // todo: o pueden refactorizar en un solo metodo
+    // private cambiarEstado(Long id, Enum estado)
     @Override
     public Solicitud marcarResuelto(Long id){
         Solicitud solicitud = solicitudRepository.findById(id)

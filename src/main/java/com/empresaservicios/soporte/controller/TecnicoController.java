@@ -18,6 +18,7 @@ import com.empresaservicios.soporte.service.TecnicoService;
 
 import lombok.RequiredArgsConstructor;
 
+// todo: mejorar mensajes de error
 @RestController
 @RequestMapping("/api/tecnicos")
 @RequiredArgsConstructor
