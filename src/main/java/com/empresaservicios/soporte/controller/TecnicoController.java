@@ -3,6 +3,8 @@ package com.empresaservicios.soporte.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.empresaservicios.soporte.dto.TecnicoUpdateDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +52,9 @@ public class TecnicoController {
     }
 
      @PatchMapping("/{id}/actualizarDatos")
-    public ResponseEntity<Tecnico> actualizarDatos(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
-        Tecnico datosNuevos = tecnicoService.actualizarDatos(id, datos);
+    public ResponseEntity<Tecnico> actualizarDatos(@PathVariable Long id,
+                                                   @Valid @RequestBody TecnicoUpdateDTO dto) {
+        Tecnico datosNuevos = tecnicoService.actualizarDatos(id, dto);
         return ResponseEntity.ok(datosNuevos);
     }
 }

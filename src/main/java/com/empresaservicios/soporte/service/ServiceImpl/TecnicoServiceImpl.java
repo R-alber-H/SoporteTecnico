@@ -2,6 +2,7 @@ package com.empresaservicios.soporte.service.ServiceImpl;
 
 import java.util.Map;
 
+import com.empresaservicios.soporte.dto.TecnicoUpdateDTO;
 import org.springframework.stereotype.Service;
 
 import com.empresaservicios.soporte.entity.DatosPersona;
@@ -34,21 +35,31 @@ public class TecnicoServiceImpl extends GenericServiceImpl<Tecnico, Long> implem
     }
 
     @Override
-    public Tecnico actualizarDatos(Long id, Map<String, Object> datos) {
+    public Tecnico actualizarDatos(Long id, TecnicoUpdateDTO dto) {
+
         Tecnico tecnico = tecnicoRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Tecnico no encontrado"));
+
         DatosPersona persona = tecnico.getDatosPersona();
+
         if (persona == null) {
-            throw new RuntimeException("El técnico no tiene datos personales asociados");
+            throw new UsuarioNoEncontradoException("El técnico no tiene datos personales asociados");
         }
-        if (datos.containsKey("nombres")) {
-            persona.setNombres((String) datos.get("nombres"));
+
+        if (dto.nombres() != null && !dto.nombres().isBlank()) {
+            persona.setNombres(dto.nombres());
         }
-        if (datos.containsKey("telefono")) {
-            persona.setTelefono((String) datos.get("telefono"));
+
+        if (dto.apellidos() != null && !dto.apellidos().isBlank()) {
+            persona.setApellidos(dto.apellidos());
         }
+
+        if (dto.telefono() != null && !dto.telefono().isBlank()) {
+            persona.setTelefono(dto.telefono());
+        }
+
         datosPersonaRepository.save(persona);
-        return tecnicoRepository.findById(id).get();
+        return tecnico;
     }
 
 }
