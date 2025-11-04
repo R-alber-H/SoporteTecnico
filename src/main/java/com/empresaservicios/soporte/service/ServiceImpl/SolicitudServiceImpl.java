@@ -42,26 +42,24 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
 
     @Override
     public Solicitud marcarResuelto(Long id){
-        Solicitud solicitud = solicitudRepository.findById(id)
-            .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
-        solicitud.setEstado(Estado.RESUELTO);
-       return solicitudRepository.save(solicitud);
+        return cambiarEstadoSolicitud(id, Estado.RESUELTO);
         
     }
 
     @Override
     public Solicitud marcarNoResuelto(Long id){
-       Solicitud solicitud = solicitudRepository.findById(id)
-            .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
-        solicitud.setEstado(Estado.NO_RESUELTO);
-       return solicitudRepository.save(solicitud); 
+        return cambiarEstadoSolicitud(id, Estado.NO_RESUELTO);
     }
 
     @Override
     public Solicitud marcarCancelado(Long id){
+        return cambiarEstadoSolicitud(id, Estado.CANCELADO);
+    }
+
+    private Solicitud cambiarEstadoSolicitud(Long id, Estado nuevoEstado){
         Solicitud solicitud = solicitudRepository.findById(id)
-        .orElseThrow(()-> new SolicitudNoEncontradaException("solicitud no encontrada"));
-        solicitud.setEstado(Estado.CANCELADO);
+                .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada"));
+        solicitud.setEstado(nuevoEstado);
         return solicitudRepository.save(solicitud);
     }
 }
