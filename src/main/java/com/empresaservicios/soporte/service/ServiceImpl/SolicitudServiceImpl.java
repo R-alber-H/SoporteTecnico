@@ -1,5 +1,8 @@
 package com.empresaservicios.soporte.service.ServiceImpl;
 
+import com.empresaservicios.soporte.dto.SolicitudCreateDTO;
+import com.empresaservicios.soporte.dto.SolicitudDTO;
+import com.empresaservicios.soporte.dto.SolicitudUpdateDTO;
 import org.springframework.stereotype.Service;
 
 import com.empresaservicios.soporte.entity.Cliente;
@@ -11,6 +14,9 @@ import com.empresaservicios.soporte.repository.SolicitudRepository;
 import com.empresaservicios.soporte.service.SolicitudService;
 import com.empresaservicios.soporte.utils.enums.Activo;
 import com.empresaservicios.soporte.utils.enums.Estado;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> implements SolicitudService {
@@ -33,33 +39,138 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     }
 
     @Override
-    public Solicitud cambiarActivo(Long id) {
+    public SolicitudDTO cambiarActivo(Long id) {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
+
         solicitud.setActivo(solicitud.getActivo() == Activo.SI ? Activo.NO : Activo.SI);
-        return solicitudRepository.save(solicitud);
+
+        Solicitud guardada = solicitudRepository.save(solicitud);
+
+        return new SolicitudDTO(
+                guardada.getId(),
+                guardada.getAsunto(),
+                guardada.getDescripcion(),
+                guardada.getEstado(),
+                guardada.getActivo(),
+                guardada.getCliente().getId(),
+                guardada.getMotivoRechazo()
+        );
     }
 
     @Override
-    public Solicitud marcarResuelto(Long id){
+    public SolicitudDTO marcarResuelto(Long id){
         return cambiarEstadoSolicitud(id, Estado.RESUELTO);
         
     }
 
     @Override
-    public Solicitud marcarNoResuelto(Long id){
+    public SolicitudDTO marcarNoResuelto(Long id){
         return cambiarEstadoSolicitud(id, Estado.NO_RESUELTO);
     }
 
     @Override
-    public Solicitud marcarCancelado(Long id){
+    public SolicitudDTO marcarCancelado(Long id){
         return cambiarEstadoSolicitud(id, Estado.CANCELADO);
     }
 
-    private Solicitud cambiarEstadoSolicitud(Long id, Estado nuevoEstado){
+    @Override
+    @Transactional
+    public SolicitudDTO crear(SolicitudCreateDTO dto) {
+        Cliente cliente = clienteRepository.findById(dto.clienteId())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado"));
+
+        Solicitud solicitud = Solicitud.builder()
+                .asunto(dto.asunto())
+                .activo(Activo.SI)
+                .estado(Estado.PENDIENTE)
+                .descripcion(dto.descripcion())
+                .cliente(cliente)
+                .build();
+
+        Solicitud guardada = solicitudRepository.save(solicitud);
+
+        return new SolicitudDTO(
+                guardada.getId(),
+                guardada.getAsunto(),
+                guardada.getDescripcion(),
+                guardada.getEstado(),
+                guardada.getActivo(),
+                guardada.getCliente().getId(),
+                guardada.getMotivoRechazo()
+        );
+    }
+
+    @Override
+    public SolicitudDTO buscarPorId(Long id) {
+        Solicitud solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada con ID " + id));
+
+        return new SolicitudDTO(
+                solicitud.getId(),
+                solicitud.getAsunto(),
+                solicitud.getDescripcion(),
+                solicitud.getEstado(),
+                solicitud.getActivo(),
+                solicitud.getCliente().getId(),
+                solicitud.getMotivoRechazo()
+        );
+    }
+
+    @Override
+    public List<SolicitudDTO> buscarTodos() {
+        List<Solicitud> solicitudes = solicitudRepository.findAll();
+
+        return solicitudes.stream()
+                .map(solicitud -> new SolicitudDTO(
+                        solicitud.getId(),
+                        solicitud.getAsunto(),
+                        solicitud.getDescripcion(),
+                        solicitud.getEstado(),
+                        solicitud.getActivo(),
+                        solicitud.getCliente().getId(),
+                        solicitud.getMotivoRechazo()
+                ))
+                .toList();
+    }
+
+    @Override
+    public SolicitudDTO actualizar(Long id, SolicitudUpdateDTO dto) {
+        Solicitud solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada con ID " + id));
+
+        solicitud.setAsunto(dto.asunto());
+        solicitud.setDescripcion(dto.descripcion());
+
+        Solicitud guardada = solicitudRepository.save(solicitud);
+
+        return new SolicitudDTO(
+                guardada.getId(),
+                guardada.getAsunto(),
+                guardada.getDescripcion(),
+                guardada.getEstado(),
+                guardada.getActivo(),
+                guardada.getCliente().getId(),
+                guardada.getMotivoRechazo()
+        );
+    }
+
+    private SolicitudDTO cambiarEstadoSolicitud(Long id, Estado nuevoEstado){
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada"));
+
         solicitud.setEstado(nuevoEstado);
-        return solicitudRepository.save(solicitud);
+
+        Solicitud guardada = solicitudRepository.save(solicitud);
+
+        return new SolicitudDTO(
+                guardada.getId(),
+                guardada.getAsunto(),
+                guardada.getDescripcion(),
+                guardada.getEstado(),
+                guardada.getActivo(),
+                guardada.getCliente().getId(),
+                guardada.getMotivoRechazo()
+        );
     }
 }

@@ -2,6 +2,9 @@ package com.empresaservicios.soporte.service.ServiceImpl;
 
 import java.util.Map;
 
+import com.empresaservicios.soporte.dto.DatosPersonaDTO;
+import com.empresaservicios.soporte.dto.TecnicoCreateDTO;
+import com.empresaservicios.soporte.dto.TecnicoDTO;
 import com.empresaservicios.soporte.dto.TecnicoUpdateDTO;
 import org.springframework.stereotype.Service;
 
@@ -62,4 +65,33 @@ public class TecnicoServiceImpl extends GenericServiceImpl<Tecnico, Long> implem
         return tecnico;
     }
 
+    @Override
+    public TecnicoDTO crear(TecnicoCreateDTO dto) {
+        if (dto.datosPersona() == null) {
+            throw new IllegalArgumentException("Los datos personales del técnico son obligatorios");
+        }
+
+        Tecnico tecnico = Tecnico.builder()
+                .activo(Activo.SI) // valor por defecto
+                .datosPersona(DatosPersona.builder()
+                        .nombres(dto.datosPersona().nombres())
+                        .apellidos(dto.datosPersona().apellidos())
+                        .dni(dto.datosPersona().dni())
+                        .telefono(dto.datosPersona().telefono())
+                        .build())
+                .build();
+
+        Tecnico guardado = tecnicoRepository.save(tecnico);
+
+        return new TecnicoDTO(
+                guardado.getId(),
+                guardado.getActivo(),
+                new DatosPersonaDTO(
+                        guardado.getDatosPersona().getNombres(),
+                        guardado.getDatosPersona().getApellidos(),
+                        guardado.getDatosPersona().getDni(),
+                        guardado.getDatosPersona().getTelefono()
+                )
+        );
+    }
 }

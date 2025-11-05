@@ -3,6 +3,8 @@ package com.empresaservicios.soporte.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.empresaservicios.soporte.dto.TecnicoCreateDTO;
+import com.empresaservicios.soporte.dto.TecnicoDTO;
 import com.empresaservicios.soporte.dto.TecnicoUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -40,8 +42,8 @@ public class TecnicoController {
     }
 
     @PostMapping
-    public ResponseEntity<Tecnico> create(@RequestBody Tecnico tecnico) {
-        Tecnico saved = tecnicoService.save(tecnico);
+    public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoCreateDTO tecnico) {
+        TecnicoDTO saved = tecnicoService.crear(tecnico);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 

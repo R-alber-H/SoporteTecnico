@@ -3,6 +3,8 @@ package com.empresaservicios.soporte.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.empresaservicios.soporte.dto.ClienteCreateDTO;
+import com.empresaservicios.soporte.dto.ClienteDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +40,8 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
-        Cliente saved = clienteService.save(cliente);
+    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteCreateDTO dto) {
+        ClienteDTO saved = clienteService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 

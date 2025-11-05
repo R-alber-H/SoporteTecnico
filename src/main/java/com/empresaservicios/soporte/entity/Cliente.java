@@ -10,12 +10,14 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
@@ -24,7 +26,7 @@ public class Cliente extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Activo activo = Activo.SI;
+    private Activo activo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_datos_persona")

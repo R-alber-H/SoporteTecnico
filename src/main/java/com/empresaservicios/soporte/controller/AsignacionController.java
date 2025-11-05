@@ -2,6 +2,8 @@ package com.empresaservicios.soporte.controller;
 
 import java.util.List;
 
+import com.empresaservicios.soporte.dto.AsignacionCreateDTO;
+import com.empresaservicios.soporte.dto.AsignacionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +38,8 @@ public class AsignacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Asignacion> create(@RequestBody Asignacion asignacion) {
-        Asignacion saved = asignacionService.save(asignacion);
+    public ResponseEntity<AsignacionDTO> create(@RequestBody AsignacionCreateDTO dto) {
+        AsignacionDTO saved = asignacionService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 

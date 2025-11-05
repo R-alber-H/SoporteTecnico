@@ -2,6 +2,10 @@ package com.empresaservicios.soporte.controller;
 
 import java.util.List;
 
+import com.empresaservicios.soporte.dto.SolicitudCreateDTO;
+import com.empresaservicios.soporte.dto.SolicitudDTO;
+import com.empresaservicios.soporte.dto.SolicitudUpdateDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,50 +30,51 @@ public class SolicitudController {
     private final SolicitudService solicitudService;
 
     @GetMapping
-    public ResponseEntity<List<Solicitud>> findAll() {
-        List<Solicitud> solicitud = solicitudService.findAll();
+    public ResponseEntity<List<SolicitudDTO>> findAll() {
+        List<SolicitudDTO> solicitud = solicitudService.buscarTodos();
         return ResponseEntity.ok(solicitud);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Solicitud> findById(@PathVariable Long id) {
-        Solicitud solicitud = solicitudService.findById(id);
+    public ResponseEntity<SolicitudDTO> findById(@PathVariable Long id) {
+        SolicitudDTO solicitud = solicitudService.buscarPorId(id);
         return ResponseEntity.ok(solicitud);
     }
 
     @PostMapping
-    public ResponseEntity<Solicitud> create(@RequestBody Solicitud solicitud) {
-        Solicitud saved = solicitudService.save(solicitud);
+    public ResponseEntity<SolicitudDTO> create(@Valid @RequestBody SolicitudCreateDTO dto) {
+        SolicitudDTO saved = solicitudService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Solicitud> update(@PathVariable Long id, @RequestBody Solicitud solicitud) {
-        Solicitud updated = solicitudService.update(id, solicitud);
+    public ResponseEntity<SolicitudDTO> update(@PathVariable Long id,
+                                               @Valid @RequestBody SolicitudUpdateDTO solicitud) {
+        SolicitudDTO updated = solicitudService.actualizar(id, solicitud);
         return ResponseEntity.ok(updated);
     }
 
     @PatchMapping("/{id}/activo")
-    public ResponseEntity<Solicitud> cambiarActivo(@PathVariable Long id) {
-        Solicitud actualizado = solicitudService.cambiarActivo(id);
+    public ResponseEntity<SolicitudDTO> cambiarActivo(@PathVariable Long id) {
+        SolicitudDTO actualizado = solicitudService.cambiarActivo(id);
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/resuelto")
-    public ResponseEntity<Solicitud> marcarResuelto(@PathVariable Long id){
-        Solicitud actualizado = solicitudService.marcarResuelto(id);
+    public ResponseEntity<SolicitudDTO> marcarResuelto(@PathVariable Long id){
+        SolicitudDTO actualizado = solicitudService.marcarResuelto(id);
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/no-resuelto")
-    public ResponseEntity<Solicitud> marcarNoResuelto(@PathVariable Long id){
-        Solicitud actualizado = solicitudService.marcarNoResuelto(id);
+    public ResponseEntity<SolicitudDTO> marcarNoResuelto(@PathVariable Long id){
+        SolicitudDTO actualizado = solicitudService.marcarNoResuelto(id);
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/cancelar")
-    public ResponseEntity<Solicitud> marcarCancelado(@PathVariable Long id){
-        Solicitud actualizado = solicitudService.marcarCancelado(id);
+    public ResponseEntity<SolicitudDTO> marcarCancelado(@PathVariable Long id){
+        SolicitudDTO actualizado = solicitudService.marcarCancelado(id);
         return ResponseEntity.ok(actualizado);
     }
 

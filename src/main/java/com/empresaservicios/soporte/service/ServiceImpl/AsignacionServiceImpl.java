@@ -1,5 +1,7 @@
 package com.empresaservicios.soporte.service.ServiceImpl;
 
+import com.empresaservicios.soporte.dto.AsignacionCreateDTO;
+import com.empresaservicios.soporte.dto.AsignacionDTO;
 import org.springframework.stereotype.Service;
 
 import com.empresaservicios.soporte.entity.Asignacion;
@@ -52,4 +54,27 @@ public class AsignacionServiceImpl extends GenericServiceImpl<Asignacion, Long> 
         return asignacionRepository.save(asignacion);
     }
 
+    @Override
+    public AsignacionDTO crear(AsignacionCreateDTO dto) {
+        Tecnico tecnico = tecnicoRepository.findById(dto.tecnicoId())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Técnico no encontrado"));
+
+        Solicitud solicitud = solicitudRepository.findById(dto.solicitudId())
+                .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada"));
+
+        Asignacion asignacion = Asignacion.builder()
+                .tecnico(tecnico)
+                .solicitud(solicitud)
+                .build();
+
+        Asignacion guardada = asignacionRepository.save(asignacion);
+
+        return new AsignacionDTO(
+                guardada.getId(),
+                tecnico.getId(),
+                tecnico.getDatosPersona().getNombres() + " " + tecnico.getDatosPersona().getApellidos(),
+                solicitud.getId(),
+                solicitud.getAsunto()
+        );
+    }
 }
