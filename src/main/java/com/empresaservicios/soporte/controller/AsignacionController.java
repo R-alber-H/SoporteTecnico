@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.empresaservicios.soporte.dto.AsignacionCreateDTO;
 import com.empresaservicios.soporte.dto.AsignacionDTO;
+import com.empresaservicios.soporte.dto.AsignacionUpdateDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,26 +28,27 @@ public class AsignacionController {
     private final AsignacionService asignacionService;
 
     @GetMapping
-    public ResponseEntity<List<Asignacion>> findAll() {
-        List<Asignacion> asignacion = asignacionService.findAll();
+    public ResponseEntity<List<AsignacionDTO>> findAll() {
+        List<AsignacionDTO> asignacion = asignacionService.listarTodos();
         return ResponseEntity.ok(asignacion);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Asignacion> findById(@PathVariable Long id) {
-        Asignacion asignacion = asignacionService.findById(id);
+    public ResponseEntity<AsignacionDTO> findById(@PathVariable Long id) {
+        AsignacionDTO asignacion = asignacionService.encontrarPorId(id);
         return ResponseEntity.ok(asignacion);
     }
 
     @PostMapping
-    public ResponseEntity<AsignacionDTO> create(@RequestBody AsignacionCreateDTO dto) {
+    public ResponseEntity<AsignacionDTO> create(@Valid @RequestBody AsignacionCreateDTO dto) {
         AsignacionDTO saved = asignacionService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Asignacion> update(@PathVariable Long id, @RequestBody Asignacion asignacion) {
-        Asignacion updated = asignacionService.update(id, asignacion);
+    public ResponseEntity<AsignacionDTO> update(@PathVariable Long id,
+                                                @Valid @RequestBody AsignacionUpdateDTO dto) {
+        AsignacionDTO updated = asignacionService.actualizar(id, dto);
         return ResponseEntity.ok(updated);
     }
 }

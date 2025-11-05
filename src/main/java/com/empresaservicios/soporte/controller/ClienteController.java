@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.empresaservicios.soporte.dto.ClienteCreateDTO;
 import com.empresaservicios.soporte.dto.ClienteDTO;
+import com.empresaservicios.soporte.dto.ClienteUpdateDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,14 +30,14 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> findAll() {
-        List<Cliente> clientes = clienteService.findAll();
+    public ResponseEntity<List<ClienteDTO>> findAll() {
+        List<ClienteDTO> clientes = clienteService.listarTodos();
         return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
-        Cliente cliente = clienteService.findById(id);
+    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.buscarPorId(id);
         return ResponseEntity.ok(cliente);
     }
 
@@ -46,15 +48,15 @@ public class ClienteController {
     }
 
     @PatchMapping("/{id}/activo")
-    public ResponseEntity<Cliente> cambiarActivo(@PathVariable Long id) {
-        Cliente actualizado = clienteService.cambiarActivo(id);
+    public ResponseEntity<ClienteDTO> cambiarActivo(@PathVariable Long id) {
+        ClienteDTO actualizado = clienteService.cambiarActivo(id);
         return ResponseEntity.ok(actualizado);
     }
 
-
     @PatchMapping("/{id}/actualizarDatos")
-    public ResponseEntity<Cliente> actualizarDatos(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
-        Cliente datosNuevos = clienteService.actualizarDatos(id, datos);
+    public ResponseEntity<ClienteDTO> actualizarDatos(@PathVariable Long id,
+                                                      @Valid @RequestBody ClienteUpdateDTO dto) {
+        ClienteDTO datosNuevos = clienteService.actualizarDatos(id, dto);
         return ResponseEntity.ok(datosNuevos);
     }
 

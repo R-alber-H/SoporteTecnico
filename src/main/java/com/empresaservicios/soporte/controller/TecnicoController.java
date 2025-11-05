@@ -30,33 +30,33 @@ public class TecnicoController {
     private final TecnicoService tecnicoService;
 
     @GetMapping
-    public ResponseEntity<List<Tecnico>> findAll() {
-        List<Tecnico> tecnicos = tecnicoService.findAll();
+    public ResponseEntity<List<TecnicoDTO>> findAll() {
+        List<TecnicoDTO> tecnicos = tecnicoService.listarTodos();
         return ResponseEntity.ok(tecnicos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tecnico> findById(@PathVariable Long id) {
-        Tecnico tecnico = tecnicoService.findById(id);
+    public ResponseEntity<TecnicoDTO> findById(@PathVariable Long id) {
+        TecnicoDTO tecnico = tecnicoService.buscarPorId(id);
         return ResponseEntity.ok(tecnico);
     }
 
     @PostMapping
-    public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoCreateDTO tecnico) {
+    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoCreateDTO tecnico) {
         TecnicoDTO saved = tecnicoService.crear(tecnico);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PatchMapping("/{id}/activo")
-    public ResponseEntity<Tecnico> cambiarActivo(@PathVariable Long id) {
-        Tecnico actualizado = tecnicoService.cambiarActivo(id);
+    public ResponseEntity<TecnicoDTO> cambiarActivo(@PathVariable Long id) {
+        TecnicoDTO actualizado = tecnicoService.cambiarActivo(id);
         return ResponseEntity.ok(actualizado);
     }
 
      @PatchMapping("/{id}/actualizarDatos")
-    public ResponseEntity<Tecnico> actualizarDatos(@PathVariable Long id,
+    public ResponseEntity<TecnicoDTO> actualizarDatos(@PathVariable Long id,
                                                    @Valid @RequestBody TecnicoUpdateDTO dto) {
-        Tecnico datosNuevos = tecnicoService.actualizarDatos(id, dto);
+        TecnicoDTO datosNuevos = tecnicoService.actualizarDatos(id, dto);
         return ResponseEntity.ok(datosNuevos);
     }
 }

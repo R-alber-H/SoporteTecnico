@@ -27,6 +27,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(DniUsadoException.class)
+    public ResponseEntity<Map<String,String>> handleDniUsado(DniUsadoException ex) {
+        Map<String,String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(RucUsadoException.class)
+    public ResponseEntity<Map<String,String>> handleRucUsado(RucUsadoException ex) {
+        Map<String,String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(AsignacionNoPendienteException.class)
+    public ResponseEntity<Map<String,String>> handleAsignacionNoPendiente(AsignacionNoPendienteException ex) {
+        Map<String,String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

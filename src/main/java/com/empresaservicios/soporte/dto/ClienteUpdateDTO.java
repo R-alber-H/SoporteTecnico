@@ -4,14 +4,14 @@ import com.empresaservicios.soporte.utils.enums.TipoCliente;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public record ClienteCreateDTO(
+public record ClienteUpdateDTO(
         @NotNull(message = "El tipo de cliente es obligatorio")
         TipoCliente tipoCliente,
 
         @Valid
-        DatosPersonaDTO datosPersona,
+        DatosPersonaUpdateDTO datosPersona,
 
         @Valid
-        DatosEmpresaDTO datosEmpresa
+        DatosEmpresaUpdateDTO datosEmpresa
 ) {
 }

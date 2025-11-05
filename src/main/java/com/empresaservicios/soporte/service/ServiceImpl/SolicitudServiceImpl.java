@@ -30,15 +30,8 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
         this.clienteRepository =clienteRepository;
     }
 
-    public Solicitud save(Solicitud solicitud) {
-        Long clienteId = solicitud.getCliente().getId();
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado"));
-        solicitud.setCliente(cliente);
-        return solicitudRepository.save(solicitud);
-    }
-
     @Override
+    @Transactional
     public SolicitudDTO cambiarActivo(Long id) {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new SolicitudNoEncontradaException("Solicictud no encontrada"));
@@ -59,17 +52,20 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     }
 
     @Override
+    @Transactional
     public SolicitudDTO marcarResuelto(Long id){
         return cambiarEstadoSolicitud(id, Estado.RESUELTO);
         
     }
 
     @Override
+    @Transactional
     public SolicitudDTO marcarNoResuelto(Long id){
         return cambiarEstadoSolicitud(id, Estado.NO_RESUELTO);
     }
 
     @Override
+    @Transactional
     public SolicitudDTO marcarCancelado(Long id){
         return cambiarEstadoSolicitud(id, Estado.CANCELADO);
     }
@@ -135,6 +131,7 @@ public class SolicitudServiceImpl extends GenericServiceImpl<Solicitud, Long> im
     }
 
     @Override
+    @Transactional
     public SolicitudDTO actualizar(Long id, SolicitudUpdateDTO dto) {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new SolicitudNoEncontradaException("Solicitud no encontrada con ID " + id));

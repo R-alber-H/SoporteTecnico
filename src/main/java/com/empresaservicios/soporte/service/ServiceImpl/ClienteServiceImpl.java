@@ -1,11 +1,11 @@
 package com.empresaservicios.soporte.service.ServiceImpl;
 
+import java.util.List;
 import java.util.Map;
 
-import com.empresaservicios.soporte.dto.ClienteCreateDTO;
-import com.empresaservicios.soporte.dto.ClienteDTO;
-import com.empresaservicios.soporte.dto.DatosEmpresaDTO;
-import com.empresaservicios.soporte.dto.DatosPersonaDTO;
+import com.empresaservicios.soporte.dto.*;
+import com.empresaservicios.soporte.exception.DniUsadoException;
+import com.empresaservicios.soporte.exception.RucUsadoException;
 import org.springframework.stereotype.Service;
 
 import com.empresaservicios.soporte.entity.Cliente;
@@ -35,45 +35,57 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente, Long> implem
     }
 
     @Override
-    public Cliente cambiarActivo(Long id) {
+    @Transactional
+    public ClienteDTO cambiarActivo(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado"));
 
         cliente.setActivo(cliente.getActivo() == Activo.SI ? Activo.NO : Activo.SI);
-        return clienteRepository.save(cliente);
+
+        Cliente actualizado = clienteRepository.save(cliente);
+
+        return toDTO(actualizado);
     }
 
     @Override
-    public Cliente actualizarDatos(Long id, Map<String, Object> datos) {
+    @Transactional
+    public ClienteDTO actualizarDatos(Long id, ClienteUpdateDTO dto) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado"));
+
         if (cliente.getTipoCliente() == TipoCliente.PERSONA) {
+            if (dto.datosPersona() == null) {
+                throw new IllegalArgumentException("Debe enviar datosPersona para cliente tipo PERSONA");
+            }
+
             DatosPersona persona = cliente.getDatosPersona();
             if (persona == null) {
                 throw new RuntimeException("El cliente no tiene datos de persona asociados");
             }
-            if (datos.containsKey("nombres")) {
-                persona.setNombres((String) datos.get("nombres"));
-            }
-            if (datos.containsKey("telefono")) {
-                persona.setTelefono((String) datos.get("telefono"));
-            }
+
+            persona.setNombres(dto.datosPersona().nombres());
+            persona.setApellidos(dto.datosPersona().apellidos());
+            persona.setTelefono(dto.datosPersona().telefono());
             datosPersonaRepository.save(persona);
 
         } else if (cliente.getTipoCliente() == TipoCliente.EMPRESA) {
+            if (dto.datosEmpresa() == null) {
+                throw new IllegalArgumentException("Debe enviar datosEmpresa para cliente tipo EMPRESA");
+            }
+
             DatosEmpresa empresa = cliente.getDatosEmpresa();
             if (empresa == null) {
                 throw new RuntimeException("El cliente no tiene datos de empresa asociados");
             }
-            if (datos.containsKey("razonSocial")) {
-                empresa.setRazonSocial((String) datos.get("razonSocial"));
-            }
-            if (datos.containsKey("telefono")) {
-                empresa.setTelefono((String) datos.get("telefono"));
-            }
+
+            empresa.setRazonSocial(dto.datosEmpresa().razonSocial());
+            empresa.setTelefono(dto.datosEmpresa().telefono());
             datosEmpresaRepository.save(empresa);
         }
-        return repository.findById(id).get();
+
+        Cliente actualizado = repository.save(cliente);
+
+        return toDTO(actualizado);
     }
 
     @Override
@@ -84,6 +96,12 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente, Long> implem
         if (dto.tipoCliente() == TipoCliente.PERSONA) {
             if (dto.datosPersona() == null) {
                 throw new IllegalArgumentException("Debe enviar datosPersona para cliente tipo PERSONA");
+            }
+
+            Boolean existeDni = datosPersonaRepository.existsByDniIgnoreCaseAllIgnoreCase(dto.datosPersona().dni());
+
+            if (existeDni) {
+                throw new DniUsadoException("El dni ya esta siendo usado por otro cliente/tecnico");
             }
 
             cliente = Cliente.builder()
@@ -102,6 +120,12 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente, Long> implem
                 throw new IllegalArgumentException("Debe enviar datosEmpresa para cliente tipo EMPRESA");
             }
 
+            Boolean existeRuc = datosEmpresaRepository.existsByRucIgnoreCase(dto.datosEmpresa().ruc());
+
+            if (existeRuc) {
+                throw new RucUsadoException("El ruc ya ha sido usado por otra empresa");
+            }
+
             cliente = Cliente.builder()
                     .tipoCliente(dto.tipoCliente())
                     .activo(Activo.SI)
@@ -118,23 +142,47 @@ public class ClienteServiceImpl extends GenericServiceImpl<Cliente, Long> implem
 
         Cliente guardado = clienteRepository.save(cliente);
 
+        return toDTO(guardado);
+    }
+
+    @Override
+    public ClienteDTO buscarPorId(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Cliente no encontrado con id " + id));
+
+        return toDTO(cliente);
+    }
+
+    @Override
+    public List<ClienteDTO> listarTodos() {
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        return clientes.stream()
+                .map(c -> toDTO(c))
+                .toList();
+    }
+
+    private ClienteDTO toDTO(Cliente cliente) {
         return new ClienteDTO(
-                guardado.getId(),
-                guardado.getTipoCliente(),
-                guardado.getActivo(),
-                guardado.getDatosPersona() != null ?
-                        new DatosPersonaDTO(
-                                guardado.getDatosPersona().getNombres(),
-                                guardado.getDatosPersona().getApellidos(),
-                                guardado.getDatosPersona().getDni(),
-                                guardado.getDatosPersona().getTelefono()
-                        ) : null,
-                guardado.getDatosEmpresa() != null ?
-                        new DatosEmpresaDTO(
-                                guardado.getDatosEmpresa().getRazonSocial(),
-                                guardado.getDatosEmpresa().getRuc(),
-                                guardado.getDatosEmpresa().getTelefono()
-                        ) : null
+                cliente.getId(),
+                cliente.getTipoCliente(),
+                cliente.getActivo(),
+                cliente.getDatosPersona() != null
+                        ? new DatosPersonaDTO(
+                        cliente.getDatosPersona().getNombres(),
+                        cliente.getDatosPersona().getApellidos(),
+                        cliente.getDatosPersona().getDni(),
+                        cliente.getDatosPersona().getTelefono()
+                )
+                        : null,
+                cliente.getDatosEmpresa() != null
+                        ? new DatosEmpresaDTO(
+                        cliente.getDatosEmpresa().getRazonSocial(),
+                        cliente.getDatosEmpresa().getRuc(),
+                        cliente.getDatosEmpresa().getTelefono()
+                )
+                        : null
         );
     }
+
 }
