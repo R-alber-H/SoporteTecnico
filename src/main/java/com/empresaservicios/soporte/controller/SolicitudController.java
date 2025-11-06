@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empresaservicios.soporte.entity.Solicitud;
+// import com.empresaservicios.soporte.entity.Solicitud;
 import com.empresaservicios.soporte.service.SolicitudService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class SolicitudController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudDTO> update(@PathVariable Long id,
-                                               @Valid @RequestBody SolicitudUpdateDTO solicitud) {
+            @Valid @RequestBody SolicitudUpdateDTO solicitud) {
         SolicitudDTO updated = solicitudService.actualizar(id, solicitud);
         return ResponseEntity.ok(updated);
     }
@@ -61,19 +61,19 @@ public class SolicitudController {
     }
 
     @PatchMapping("/{id}/resuelto")
-    public ResponseEntity<SolicitudDTO> marcarResuelto(@PathVariable Long id){
+    public ResponseEntity<SolicitudDTO> marcarResuelto(@PathVariable Long id) {
         SolicitudDTO actualizado = solicitudService.marcarResuelto(id);
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/no-resuelto")
-    public ResponseEntity<SolicitudDTO> marcarNoResuelto(@PathVariable Long id){
+    public ResponseEntity<SolicitudDTO> marcarNoResuelto(@PathVariable Long id) {
         SolicitudDTO actualizado = solicitudService.marcarNoResuelto(id);
         return ResponseEntity.ok(actualizado);
     }
 
     @PatchMapping("/{id}/cancelar")
-    public ResponseEntity<SolicitudDTO> marcarCancelado(@PathVariable Long id){
+    public ResponseEntity<SolicitudDTO> marcarCancelado(@PathVariable Long id) {
         SolicitudDTO actualizado = solicitudService.marcarCancelado(id);
         return ResponseEntity.ok(actualizado);
     }

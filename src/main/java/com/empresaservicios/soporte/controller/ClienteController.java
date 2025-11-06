@@ -1,7 +1,7 @@
 package com.empresaservicios.soporte.controller;
 
 import java.util.List;
-import java.util.Map;
+// import java.util.Map;
 
 import com.empresaservicios.soporte.dto.ClienteCreateDTO;
 import com.empresaservicios.soporte.dto.ClienteDTO;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empresaservicios.soporte.entity.Cliente;
+// import com.empresaservicios.soporte.entity.Cliente;
 import com.empresaservicios.soporte.service.ClienteService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class ClienteController {
 
     @PatchMapping("/{id}/actualizarDatos")
     public ResponseEntity<ClienteDTO> actualizarDatos(@PathVariable Long id,
-                                                      @Valid @RequestBody ClienteUpdateDTO dto) {
+            @Valid @RequestBody ClienteUpdateDTO dto) {
         ClienteDTO datosNuevos = clienteService.actualizarDatos(id, dto);
         return ResponseEntity.ok(datosNuevos);
     }

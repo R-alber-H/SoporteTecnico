@@ -1,8 +1,7 @@
 package com.empresaservicios.soporte.repository;
 
 import com.empresaservicios.soporte.utils.enums.Activo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.empresaservicios.soporte.entity.Cliente;

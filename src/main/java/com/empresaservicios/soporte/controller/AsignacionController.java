@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empresaservicios.soporte.entity.Asignacion;
+// import com.empresaservicios.soporte.entity.Asignacion;
 import com.empresaservicios.soporte.service.AsignacionService;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class AsignacionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AsignacionDTO> update(@PathVariable Long id,
-                                                @Valid @RequestBody AsignacionUpdateDTO dto) {
+            @Valid @RequestBody AsignacionUpdateDTO dto) {
         AsignacionDTO updated = asignacionService.actualizar(id, dto);
         return ResponseEntity.ok(updated);
     }

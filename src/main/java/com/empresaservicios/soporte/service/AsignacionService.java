@@ -4,7 +4,6 @@ import com.empresaservicios.soporte.dto.AsignacionCreateDTO;
 import com.empresaservicios.soporte.dto.AsignacionDTO;
 import com.empresaservicios.soporte.dto.AsignacionUpdateDTO;
 import com.empresaservicios.soporte.entity.Asignacion;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
